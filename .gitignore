@@ -10,3 +10,5 @@ __pycache__/
 # Ignore database files (if any local SQLite files are used)
 *.sqlite3
 
+# Ignore environment variables
+.env
