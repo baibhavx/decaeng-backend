@@ -63,5 +63,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+    try {
+        const incidents = await pool.query("SELECT * FROM incidents");
+        res.json(incidents.rows);
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+
+
 export default router;
 
