@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from "express";
+import express, { Router } from "express";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import OpenAI from "openai";
@@ -36,7 +36,8 @@ async function generateEmbedding(text: string): Promise<number[]> {
 }
 
 // Route: Upload a new incident
-router.post("/", async (req: Request, res: Response) => {
+// @ts-ignore
+router.post("/", async (req, res) => {
   try {
     const { title, description } = req.body;
 

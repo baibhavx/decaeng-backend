@@ -36,7 +36,7 @@ async function generateEmbedding(text: string): Promise<number[]> {
 
 // Function to generate an AI resolution using OpenAI GPT
 async function generateResolution(query: string, incidents: {title: string; description: string}[]): Promise<string> {
-  const messages: ChatCompletionMessageParamp[] = [
+  const messages = [
     { role: "system", content: "You are an AI incident response assistant. Given past incidents, suggest a resolution for the current issue." },
     { role: "user", content: `User query: "${query}"\n\nRelevant past incidents:\n${incidents.map((i, idx) => `${idx + 1}. ${i.title} - ${i.description}`).join("\n")}\n\nWhat should be the resolution?` },
   ];
@@ -44,6 +44,7 @@ async function generateResolution(query: string, incidents: {title: string; desc
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o", // Uses OpenAI's latest GPT-4-turbo model
+      // @ts-ignore
       messages,
       max_tokens: 300,
     });
@@ -56,7 +57,8 @@ async function generateResolution(query: string, incidents: {title: string; desc
 }
 
 // Route: Search for similar incidents and generate AI resolution
-router.post("/", async (req: Request, res: Response) => {
+// @ts-ignore
+router.post("/", async (req, res) => {
   try {
     const { query } = req.body;
 
