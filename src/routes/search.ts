@@ -1,10 +1,10 @@
-import express from "express";
+import express, { Router, Request, Response } from "express";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 
 dotenv.config();
-const router = express.Router();
+const router = Router();
 
 // Initialize PostgreSQL connection
 const pool = new Pool({
@@ -35,8 +35,8 @@ async function generateEmbedding(text: string): Promise<number[]> {
 }
 
 // Function to generate an AI resolution using OpenAI GPT
-async function generateResolution(query: string, incidents: any[]): Promise<string> {
-  const messages = [
+async function generateResolution(query: string, incidents: {title: string; description: string}[]): Promise<string> {
+  const messages: ChatCompletionMessageParamp[] = [
     { role: "system", content: "You are an AI incident response assistant. Given past incidents, suggest a resolution for the current issue." },
     { role: "user", content: `User query: "${query}"\n\nRelevant past incidents:\n${incidents.map((i, idx) => `${idx + 1}. ${i.title} - ${i.description}`).join("\n")}\n\nWhat should be the resolution?` },
   ];
@@ -56,7 +56,7 @@ async function generateResolution(query: string, incidents: any[]): Promise<stri
 }
 
 // Route: Search for similar incidents and generate AI resolution
-router.post("/", async (req, res) => {
+router.post("/", async (req: Request, res: Response) => {
   try {
     const { query } = req.body;
 

@@ -1,10 +1,11 @@
-import express from "express";
+import express, { Router, Request, Response } from "express";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 
+
 dotenv.config();
-const router = express.Router();
+const router = Router();
 
 // Initialize PostgreSQL connection
 const pool = new Pool({
@@ -35,7 +36,7 @@ async function generateEmbedding(text: string): Promise<number[]> {
 }
 
 // Route: Upload a new incident
-router.post("/", async (req, res) => {
+router.post("/", async (req: Request, res: Response) => {
   try {
     const { title, description } = req.body;
 
